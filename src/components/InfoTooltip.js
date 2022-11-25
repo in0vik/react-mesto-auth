@@ -5,7 +5,7 @@ import errorImage from "../images/popup-error.svg";
 
 function InfoTooltip({ onClose, isOpen, tooltipContent }) {
 
-  let history = useHistory();
+  const history = useHistory();
 
   function handleOnClose() {
     if (tooltipContent.type === 'error') {

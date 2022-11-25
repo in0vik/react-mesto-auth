@@ -1,23 +1,15 @@
 import PopupWithForm from "./PopupWithForm";
-import { useRef, useEffect } from "react";
+import { useFormAndValidation } from "../hooks/useFormAndValidation";
 
 function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
 
-  const refNameInput = useRef(null);
-  const refLinkInput = useRef(null);
+  const { values, errors, isValid, setIsValid, setValues, handleChange, resetForm } = useFormAndValidation({})
+
 
   function handleSubmit(e) {
     e.preventDefault();
-    onAddPlace({
-      name: refNameInput.current.value,
-      link: refLinkInput.current.value
-    })
+    onAddPlace(values);
   }
-
-  useEffect(() => {
-    refNameInput.current.value = '';
-    refLinkInput.current.value = '';
-  }, [isOpen])
 
   return (
     <PopupWithForm
@@ -28,11 +20,13 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
           onClose={onClose}
           onSubmit={handleSubmit}
           isLoading={isLoading}
+          isButtonDisable={!isValid}
         >
           <input
+            value={values.name || ''}
+            onChange={handleChange}
             className="input popup__place-name-input"
-            ref={refNameInput}
-            name="placename"
+            name="name"
             id="place-name"
             placeholder="Название"
             type="text"
@@ -40,17 +34,19 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
             maxLength="30"
             required
           />
-          <span className="popup__error-message popup__error-message_type_place-name"></span>
+          {}
+          <span className="popup__error-message popup__error-message_type_place-name">{errors.name}</span>
           <input
             className="input popup__place-link-input"
-            ref={refLinkInput}
+            value={values.link || ''}
+            onChange={handleChange}
             id="place-link"
             name="link"
             placeholder="Ссылка на картинку"
             type="url"
             required
           />
-          <span className="popup__error-message popup__error-message_type_place-link"></span>
+          <span className="popup__error-message popup__error-message_type_place-link">{errors.link}</span>
         </PopupWithForm>
   )
 }

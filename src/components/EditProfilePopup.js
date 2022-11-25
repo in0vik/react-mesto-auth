@@ -1,33 +1,22 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import PopupWithForm from "./PopupWithForm";
+import { useFormAndValidation } from "../hooks/useFormAndValidation";
 
 function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
-  const [ username, setUsername ] = useState('');
-  const [ description, setDescription ] = useState('');
   const currentUser = useContext(CurrentUserContext);
-
-  function handleOnChangeUsername(e) {
-    setUsername(e.target.value);
-  }
-
-  function handleOnChangeDescription(e) {
-    setDescription(e.target.value);
-  }
+  const { values, errors, isValid, setIsValid, setValues, handleChange, resetForm } = useFormAndValidation({})
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    onUpdateUser({
-      name: username,
-      about: description
-    })
-
+    onUpdateUser(values)
   }
 
   useEffect(() => {
-    setUsername(currentUser.name);
-    setDescription(currentUser.about);
+    setValues({
+      name: currentUser.name,
+      about: currentUser.about
+    })
   }, [currentUser, isOpen])
 
   return (
@@ -39,12 +28,13 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
     onClose={onClose}
     onSubmit={handleSubmit}
     isLoading={isLoading}
+    isButtonDisable={!isValid}
   >
     <input
-      value={username || ''}
-      onChange={handleOnChangeUsername}
+      value={values.name || ''}
+      onChange={handleChange}
       className="input popup__profile-name-input"
-      name="username"
+      name="name"
       id="profile-name"
       placeholder="Имя"
       type="text"
@@ -52,12 +42,12 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
       maxLength="40"
       required
     />
-    <span className="popup__error-message popup__error-message_type_profile-name"></span>
+    <span className="popup__error-message popup__error-message_type_profile-name">{errors.name}</span>
     <input
-      value={description || ''}
-      onChange={handleOnChangeDescription}
+      value={values.about || ''}
+      onChange={handleChange}
       className="input popup__profile-job-input"
-      name="job"
+      name="about"
       id="profile-job"
       placeholder="О себе"
       type="text"
@@ -65,7 +55,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
       maxLength="200"
       required
     />
-    <span className="popup__error-message popup__error-message_type_profile-job"></span>
+    <span className="popup__error-message popup__error-message_type_profile-job">{errors.about}</span>
   </PopupWithForm>  )
 }
 

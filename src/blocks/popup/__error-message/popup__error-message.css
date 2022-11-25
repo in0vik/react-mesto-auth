@@ -1,6 +1,6 @@
 .popup__error-message {
   display: -webkit-box;
-  opacity: 0;
+  opacity: 1;
   color: #FF0000;
   font-size: 12px;
   line-height: 15px;

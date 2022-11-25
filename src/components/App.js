@@ -11,11 +11,10 @@ import AddPlacePopup from "./AddPlacePopup";
 import ConfirmDeleteCardPopup from "./ConfirmDeleteCardPopup";
 import ProtectedRoute from "./ProtectedRoute";
 import { Route, Switch, useHistory } from 'react-router-dom';
-import Login from "./Login";
-import Register from "./Register";
 import InfoTooltip from "./InfoTooltip";
 import * as auth from "../utils/auth";
 import { tooltipContents } from "./tooltipContent";
+import AuthForm from "./AuthForm";
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
@@ -194,6 +193,7 @@ function App() {
           setLoggedIn(true);
           history.push("/");
         })
+        .catch((err) => console.log(err));
     }
   }
 
@@ -210,10 +210,10 @@ function App() {
         <Header currentUserEmail={currentUserEmail} loggedIn={loggedIn} loggedOut={loggedOut} />
         <Switch>
           <Route path='/sign-in'>
-            <Login onSubmition={handleLoginSubmiit} />
+            <AuthForm type='login' onSubmition={handleLoginSubmiit} />
           </Route>
           <Route path='/sign-up'>
-            <Register onSubmition={handleRegistrationSubmiit} />
+            <AuthForm type='register' onSubmition={handleRegistrationSubmiit} />
           </Route>
           <Route path='/sign-up' />
           <ProtectedRoute 
