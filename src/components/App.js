@@ -144,6 +144,7 @@ function App() {
   };
 
   function handleRegistrationSubmiit({email, password}) {
+    setLoading(true);
     auth.register(email, password)
     .then((res) => {
       if (res) {
@@ -161,10 +162,11 @@ function App() {
       })
       setInfoTooltipPopupOpen(true);
     })
-    ;
+    .finally(() => setLoading(false))
   }
 
   function handleLoginSubmiit({ email, password }) {
+    setLoading(true);
     auth.login(email, password)
     .then((res) => {
       if (res) {
@@ -184,6 +186,7 @@ function App() {
         })
         setInfoTooltipPopupOpen(true);
     })
+    .finally(() => setLoading(false))
   }
 
   function checkToken() {
@@ -212,10 +215,10 @@ function App() {
         <Header currentUserEmail={currentUserEmail} loggedIn={loggedIn} loggedOut={loggedOut} />
         <Switch>
           <Route path='/sign-in'>
-            <AuthForm type='login' onSubmition={handleLoginSubmiit} />
+            <AuthForm type='login' onSubmition={handleLoginSubmiit} isLoading={isLoading} />
           </Route>
           <Route path='/sign-up'>
-            <AuthForm type='register' onSubmition={handleRegistrationSubmiit} />
+            <AuthForm type='register' onSubmition={handleRegistrationSubmiit} isLoading={isLoading} />
           </Route>
           <Route path='/sign-up' />
           <ProtectedRoute 

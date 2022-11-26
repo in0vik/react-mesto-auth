@@ -1,3 +1,5 @@
+// thats class React Component
+
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -6,41 +8,33 @@ class AuthForm extends React.Component {
     super(props);
     this.state = {
       email: {},
-      password: {}
+      password: {},
     };
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.hasInvalidInput = this.hasInvalidInput.bind(this);
   }
   handleOnChange(e) {
     const { name, value, validationMessage, validity } = e.target;
-    const isFormValid = e.target.closest('form').checkValidity();
+    const isFormValid = e.target.closest("form").checkValidity();
     this.setState({
       [name]: {
         value: value,
         validationMessage: validationMessage,
-        isValid: validity.valid
-      }
-    })
+        isValid: validity.valid,
+      },
+    });
     this.setState({
-      hasInvalidInput: !isFormValid
-    })
+      hasInvalidInput: !isFormValid,
+    });
   }
 
   handleSubmit(e) {
     e.preventDefault();
+    
     this.props.onSubmition({
       email: this.state.email.value,
-      password: this.state.password.value
+      password: this.state.password.value,
     });
-  }
-
-  hasInvalidInput (){
-    let res = Object.values(this.state).some((input) => {
-      console.log(input.isValid);
-      return !input.isValid
-    })
-    return res;
   }
 
   render() {
@@ -67,7 +61,9 @@ class AuthForm extends React.Component {
             maxLength="320"
             required
           />
-          <span className="popup__error-message popup__error-message_type_email">{this.state.email.validationMessage}</span>
+          <span className="popup__error-message popup__error-message_type_email">
+            {this.state.email.validationMessage}
+          </span>
           <input
             value={this.state.password.value || ""}
             onChange={this.handleOnChange}
@@ -80,10 +76,21 @@ class AuthForm extends React.Component {
             maxLength="320"
             required
           />
-          <span className="popup__error-message popup__error-message_type_password">{this.state.password.validationMessage}</span>
-          <button className={`button auth__submit-button ${this.state.hasInvalidInput && `popup__submit-button_type_disable`}`} type="submit" disabled={this.state.hasInvalidInput}>
-            {(this.props.type === "login" && "Войти") ||
-              (this.props.type === "register" && "Зарегестрироваться")}
+          <span className="popup__error-message popup__error-message_type_password">
+            {this.state.password.validationMessage}
+          </span>
+          <button
+            className={`button auth__submit-button ${
+              (this.state.hasInvalidInput || this.props.isLoading) && `popup__submit-button_type_disable`
+            }`}
+            type="submit"
+            disabled={this.state.hasInvalidInput || this.props.isLoading}
+          >
+            {(this.props.type === "login" 
+              && (this.props.isLoading ? "Вхожу..." : "Войти")) ||
+             (this.props.type === "register" 
+              && (this.props.isLoading ? "Регистрация..." : "Зарегестрироваться"))
+            }
           </button>
           {this.props.type === "register" && (
             <p className="register__login-proposal">

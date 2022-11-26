@@ -1,5 +1,6 @@
 import PopupWithForm from "./PopupWithForm";
 import { useFormAndValidation } from "../hooks/useFormAndValidation";
+import { useEffect } from "react";
 
 function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
 
@@ -10,6 +11,11 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
     e.preventDefault();
     onAddPlace(values);
   }
+
+  // clean form when popup opened
+  useEffect(() => {
+    resetForm();
+  }, [isOpen]);
 
   return (
     <PopupWithForm
