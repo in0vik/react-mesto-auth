@@ -155,11 +155,12 @@ function App() {
       }
     })
     .catch(err => {
-      if (err.status === 401) {
-       setTooltipContent(tooltipContents.invalidDataError)
-       setInfoTooltipPopupOpen(true);
-      }
-   })
+      setTooltipContent({
+        type: 'error',
+        message: err.statusText
+      })
+      setInfoTooltipPopupOpen(true);
+    })
     ;
   }
 
@@ -177,10 +178,11 @@ function App() {
       }
     })
     .catch(err => {
-       if (err.status === 401) {
-        setTooltipContent(tooltipContents.invalidDataError)
+        setTooltipContent({
+          type: 'error',
+          message: err.statusText
+        })
         setInfoTooltipPopupOpen(true);
-       }
     })
   }
 
